@@ -97,11 +97,26 @@ const ManageRestaurant = () => {
     const prepareFormData = async (formData) => {
         const data = new FormData();
     
-        // Convert restaurant image from URL to File
-        
-            data.append('restaurantImage', formData.restaurantImage); // If it's already a file
-        
+        // Helper function to ensure HTTPS in URLs
+        const ensureHttps = (url) => {
+            if (url.startsWith('http://')) {
+                return url.replace('http://', 'https://');
+            }
+            return url;
+        };
     
+        // Handle restaurant image: Convert URL to File if necessary and ensure HTTPS
+        if (formData.restaurantImage && typeof formData.restaurantImage === 'string') {
+            const restaurantImageUrl = ensureHttps(formData.restaurantImage);
+            const response = await fetch(restaurantImageUrl);
+            const blob = await response.blob();
+            const file = new File([blob], 'restaurantImage.png', { type: blob.type });
+            data.append('restaurantImage', file);
+        } else {
+            data.append('restaurantImage', formData.restaurantImage); // If it's already a file
+        }
+    
+        // Append basic restaurant details
         data.append('restaurantName', formData.restaurantName.trim());
         data.append('city', formData.city.trim());
         data.append('country', formData.country.trim());
@@ -109,26 +124,26 @@ const ManageRestaurant = () => {
         data.append('deliveryTime', parseInt(formData.deliveryTime, 10));
         data.append('cuisines', JSON.stringify(formData.cuisines));
     
-        // Convert menu item images and append to menuImages array
+        // Handle menu items and their images, ensuring HTTPS
         for (const [index, menuItem] of formData.menuItems.entries()) {
             data.append(`menuItems[${index}][name]`, menuItem.name.trim());
             data.append(`menuItems[${index}][price]`, parseFloat(menuItem.price));
     
-            // Check if the menu item image URL exists in restaurantData.menuImages and index is valid
             if (menuItem.image && typeof menuItem.image === 'string') {
-                const menuImageUrl = menuItem.image;
+                // Ensure HTTPS for menu item image URL
+                const menuImageUrl = ensureHttps(menuItem.image);
                 const response = await fetch(menuImageUrl);
                 const blob = await response.blob();
                 const file = new File([blob], `menu${index}.png`, { type: blob.type });
                 data.append('menuImages', file);
-            } else {
+            } else if (menuItem.image) {
                 data.append('menuImages', menuItem.image); // If it's already a file
             }
         }
     
-    
         return data;
     };
+    
     
     
 
