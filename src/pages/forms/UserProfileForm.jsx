@@ -32,28 +32,20 @@ const UserProfileForm = () => {
 
   useEffect(() => {
     if (data) {
-      setValue("email", data.email);
-      setValue("name", data.name);
-      setValue("addressLine1", data.addressLine1);
-      setValue("city", data.city);
-      setValue("country", data.country);
+      setValue("email", data.email || "");
+      setValue("name", data.name || "");
+      setValue("addressLine1", data.addressLine1 || "");
+      setValue("city", data.city || "");
+      setValue("country", data.country || "");
     }
   }, [data, setValue]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (!data) {
-    return <p>No data found</p>;
-  }
-
   const onSubmit = async (formData) => {
-    const { addressLine1, city, country,name } = formData;
+    const { addressLine1, city, country, name } = formData;
 
     try {
       const res = await editUserProfile({
-        data: { addressLine1, city, country,name },
+        data: { addressLine1, city, country, name },
         token,  // Use the token from state
       }).unwrap();
       console.log("Profile Updated Successfully", res);
@@ -63,6 +55,10 @@ const UserProfileForm = () => {
       toast.error("Failed to update profile. Please try again.");
     }
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
@@ -86,7 +82,6 @@ const UserProfileForm = () => {
             placeholder="Name" 
             {...register("name")}
             className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            
           />
         </div>
 
