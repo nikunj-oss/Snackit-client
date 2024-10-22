@@ -8,7 +8,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useState, useEffect } from 'react';
 
 const UserProfileForm = () => {
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently,user } = useAuth0();
   const [token, setToken] = useState(null);
   
   // Fetch the token and store it in the state
@@ -38,6 +38,7 @@ const UserProfileForm = () => {
       setValue("city", data.city || "");
       setValue("country", data.country || "");
     }
+    setValue("email",user?.email || "")
   }, [data, setValue]);
 
   const onSubmit = async (formData) => {
