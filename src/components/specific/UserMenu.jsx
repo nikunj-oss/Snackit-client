@@ -48,6 +48,12 @@ const UserMenu = ({ anchorEl, onClose, isAuthenticated, user, onLogout, onLogin,
                             User Profile
                         </Link>
                     </MenuItem>
+                    <MenuItem onClick={onClose}>
+                        <Link to="/restaurant/form" style={{ textDecoration: 'none', color: 'inherit' }}>
+                            Manage Restaurant
+                        </Link>
+                    </MenuItem>
+                    
                     <MenuItem onClick={onLogout}>
                         Logout
                     </MenuItem>

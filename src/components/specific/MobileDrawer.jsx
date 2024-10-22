@@ -48,6 +48,9 @@ const MobileDrawer = ({ isAuthenticated, user, open, onClose, onLogin, onLogout 
                                 User Profile
                             </Typography>
                         </Link>
+                        <Link to="/restaurant/form" style={{ textDecoration: 'none', color: 'inherit' }}>
+                            Manage Restaurant
+                        </Link>
                         <Button sx={{
                             color: "black",
                             transition: "color 0.3s ease",

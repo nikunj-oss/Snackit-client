@@ -63,7 +63,64 @@ const api = createApi({
         }
       },
     }),
+
+    createRestaurant:builder.mutation({
+      query:({data,token})=>({
+        url:"restaurant",
+        method:"POST",
+        body:data,
+        headers:{
+          'Authorization':`Bearer ${token}`,
+        }
+      }),
+      onQueryStarted: async (arg, { queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.error("Error creating restaurant", error);
+        }
+      },
+    }),
+    getMyRestaurant:builder.query({
+      query:({token})=>({
+        url:"restaurant",
+        method:"GET",
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization':`Bearer ${token}`
+        }
+      }),
+      onQueryStarted:async (arg,{queryFulfilled})=>{
+        try{
+          await queryFulfilled;
+        }
+        catch(e){
+          console.error("Error fetching restaurant",e)
+        }
+      }
+    }),
+
+    updateMyRestaurant:builder.mutation({
+      query:({data,token})=>({
+        url:"restaurant",
+        method:"PUT",
+        body:data,
+        headers:{
+          'Authorization':`Bearer ${token}`
+        }
+      }),
+      onQueryStarted:async (arg,{queryFulfilled})=>{
+
+        try{
+          await queryFulfilled;
+        }
+        catch(e){
+          console.error("error updating restaurant",e);
+        }
+      }
+    })
   }),
+
 });
 
 export default api;
@@ -71,4 +128,8 @@ export const {
   useCreateUserProfileMutation,
   useEditUserProfileMutation,
   useGetUserProfileQuery,
+  useCreateRestaurantMutation,
+  useGetMyRestaurantQuery,
+  useUpdateMyRestaurantMutation
+  
 } = api;
