@@ -43,7 +43,7 @@ const ManageRestaurant = () => {
             let cuisines;
             if (Array.isArray(restaurantData.cuisines)) {
                 // If cuisines is an array, no need to parse, just use it as is
-                cuisines = JSON.parse(restaurantData.cuisines || "[]");
+                cuisines = restaurantData.cuisines
             } else {
                 try {
                     // If it's not an array, try parsing it as a string
